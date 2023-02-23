@@ -1,0 +1,17 @@
+let N = 7^3 * 13^2 * 23^1
+
+void primeFact(int n){
+    for(int i = 2; i*i <= n ; i++){  // i sqaure is important here
+      if(n%i == 0){
+          int count = 0;
+          while(n%i == 0){
+              count++;
+              n = n/i; // factor removed
+          }
+          cout<< i << "^" << count << endl;
+      }
+    }
+    if(n>1){ // last factor left
+        cout<< n << "^1" << endl;
+    }
+}    
