@@ -1,0 +1,45 @@
+#define pb push_back
+#define ff first
+#define ss second
+#define pii pair<int,int>
+#define vi vector<int>
+#define vii vector<pair<int,int>>
+#define lli long long int
+#define fi(a,b) for(int i = a; i <= b; i++)
+#define fj(a,b) for(int j = a; j <= b; j++)
+#define endl '\n'
+
+vi primes;
+bool ar[87000008]; // all initialised false means prime
+
+void sieve(){
+	int maxN = 87000008;
+	ar[0] = ar[1] = true; // composite
+	
+	for(int i = 2; i*i <= maxN; i++){
+		if(ar[i] == false && (lli)i*i <= maxN){
+			for(int j = i*i; j<=maxN; j+=i){
+				ar[j] = true; // mark all composite
+			}
+		}
+	}
+	
+	fi(2, maxN){
+		if(ar[i] == false){
+			primes.pb(i);
+		}
+	}
+}
+
+int main() {
+	// your code goes here
+	int q,n;
+	cin >> q;
+	
+	sieve(); // contains all primes till 87000007
+	
+	while(q--){
+		cin>> n , cout<<primes[n-1]<< endl;
+	}
+	return 0;
+}
