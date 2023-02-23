@@ -1,0 +1,36 @@
+
+#binary Exponentiation
+
+int binExpo(int a, int n){ // a^n
+  int res = 1;
+
+  while(n){
+    if(n%2 == 0){ // power is even
+      a = a*a; // square base 
+      n = n/2; // half the power
+    }
+    else{
+      res = res*a;
+      n--;
+    }
+  }
+  return res;
+}
+
+#modulo exponentiation
+
+int moduloExpo(int a, int n, int p){ // a^n
+  int res = 1;
+
+  while(n){
+    if(n%2 == 0){ // power is even
+      a = (a*a)%p; // square base 
+      n = n/2; // half the power
+    }
+    else{
+      res = (res*a)%p;
+      n--;
+    }
+  }
+  return res;
+}
