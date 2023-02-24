@@ -1,6 +1,20 @@
 
 #method takes OlogN time complexity.
 
+#include<iostream>
+using namespace std;
+
+#define pb push_back
+#define ff first
+#define ss second
+#define pii pair<int,int>
+#define vi vector<int>
+#define vii vector<pair<int,int>>
+#define lli long long int
+#define fi(a,b) for(int i = a; i <= b; i++)
+#define fj(a,b) for(int j = a; j <= b; j++)
+#define endl '\n'
+
 int arr[1000001]; // according to the constraint.
 void sieve()
 {
@@ -26,14 +40,19 @@ int main()
 {
     int t,n;
     cin >> t;
+    
+    sieve();
+    
     while(t--)
     {
         cin >> n;
+        if(n == 1) cout << 1;
         while(n>1)
         {
             cout<< arr[n] << "," ;
             n = n/arr[n];
         }
+        cout << endl;
     }
 }
         
