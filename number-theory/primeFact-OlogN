@@ -1,0 +1,39 @@
+
+#method takes OlogN time complexity.
+
+int arr[1000001]; // according to the constraint.
+void sieve()
+{
+    int maxN = 1000000;
+    fi(1, maxN) arr[i] = -1;  // set all numbers prime.
+    
+    fi(2, maxN)
+    {
+        if(arr[i] == -1)
+        {                                          // if number is prime
+            for(int j = i; j<= maxN ; j+=i)
+            {                                    // substitute all multiples of i with 'i'
+                if(arr[j] == -1)
+                {
+                    arr[j] = i;
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    int t,n;
+    cin >> t;
+    while(t--)
+    {
+        cin >> n;
+        while(n>1)
+        {
+            cout<< arr[n] << "," ;
+            n = n/arr[n];
+        }
+    }
+}
+        
