@@ -1,0 +1,41 @@
+#include <iostream>
+using namespace std;
+
+#define fi(a,b) for(int i = a; i <= b; i++)
+#define endl '\n'
+
+int arr[100001];
+int pre[100005], suf[100005];
+
+int gcd (int a , int b){
+    if(b == 0) return a;
+    
+    else return gcd(b , a%b);
+}
+
+int main() {
+	// your code goes here
+	int n,q,t;
+	cin>>t;
+	while(t--){
+	    cin>>n>>q;
+	    
+	    fi(1,n) cin >> arr[i];
+	    
+	    pre[0] = suf[n+1] = 0;
+	    
+	    fi(1,n+1) pre[i] = gcd(arr[i], pre[i-1]);
+	    
+	    for(int i = n; i>=1 ; i--) 
+	        suf[i] = gcd(arr[i], suf[i+1]);
+	    
+	    while(q--){
+	        int L,R;
+	        cin >> L >>R;
+	        
+	        cout << gcd(pre[L-1], suf[R+1])<< endl;
+	    }
+	}
+	
+	return 0;
+}
