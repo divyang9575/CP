@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define PI 3.1415926535897932384626433832795
+#define endl '\n'
+#define lli long long int
+#define vi vector<int>
+#define vpi vector<pair<int, int>>
+#define pb push_back
+#define pi pair<int, int>
+#define ff first
+#define ss second
+#define fo(i, s, e) for (lli i = s; i <= e; i++)
+#define rfo(i, e, s) for (lli i = e; i >= s; i--)
+#define fast ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+
+bool isPossible(vi a, int n, int m, int mid)
+{
+
+    lli sum = 0;
+    for (lli i = 0; i < n; i++)
+    {
+        if (a[i] > mid)
+        {
+            if (a[i] - mid + sum >= m)
+            {
+                return true;
+            }
+            else
+            {
+                sum = sum + a[i] - mid;
+            }
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    fast 
+    lli n, m;
+    cin >> n>> m;
+
+    vi a(n);
+    fo(i, 0, n - 1) cin >> a[i];
+
+    sort(a.begin(), a.end());
+
+    lli s = 0;
+    lli e = a[n - 1];
+
+    lli mid = s + (e - s) / 2;
+    lli ans = -1;
+
+    while (s <= e)
+    {
+
+        if (isPossible(a, n, m, mid))
+        {
+            ans = mid;
+            s = mid + 1;
+        }
+        else
+        {
+            e = mid - 1;
+        }
+        mid = s + (e - s) / 2;
+    }
+
+    cout << ans;
+}
