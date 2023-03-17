@@ -1,0 +1,48 @@
+bool isPossible(vector<int>& piles, int h, int mid){
+        int k = 0;
+        int n = piles.size();
+
+        for(int i=0; i<n; i++)
+        {
+            
+            if(piles[i] <= mid) k++;
+
+            else if(piles[i] > mid)
+            {
+                int noOFhours = piles[i]/mid;
+
+                if(piles[i]%mid != 0){
+                    noOFhours+=1;
+                }
+                k = k + noOFhours;
+            }
+            if(k > h) return false;
+        }
+        return true;
+    }
+    
+    int minEatingSpeed(vector<int>& piles, int h) {
+        
+        int n = piles.size();
+
+        sort(piles.begin(), piles.end());
+
+        int s=1;
+        int e=piles[n-1];
+
+        int ans = -1;
+        
+        while(s<=e){
+            int mid = s+(e-s)/2;
+
+            if(isPossible(piles,h,mid))
+            {
+                ans  = mid;
+                e = mid-1;
+            }
+            else{
+                s = mid+1;
+            }
+        }
+        return ans;
+    }
