@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums, int thres,int mid){
+        int sum = 0;
+        for(int i = 0; i<nums.size(); i++){
+            if(nums[i]%mid == 0){
+                sum += nums[i]/mid;
+            }
+            else{
+                sum += nums[i]/mid;
+                sum++;
+            }
+        }
+
+        if(sum <= thres){
+            return true;
+        }
+        else return false;
+    }
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int n = nums.size();
+
+        int s = 1;
+        int e = *max_element(nums.begin(), nums.end());
+
+        int ans = -1;
+        while(s<=e){
+
+            int mid = e - (e-s)/2;
+
+            if(isPossible(nums,threshold,mid)){
+                ans = mid;
+                e = mid-1;
+            }
+            else{
+                s = mid+1;
+            }
+        }
+        return ans;
+    }
+};
