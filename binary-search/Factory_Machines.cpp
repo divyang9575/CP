@@ -19,23 +19,32 @@ using namespace std;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-
+bool ok(int time, int k, vi&a, int n)
+{
+    int items = 0;
+    fo(i,0,n-1)
+    {
+        items += min(time / a[i], (int)1e9);
+    }
+    return items >= k;
+}
 void solve()
 {
-    int w, h, n; cin >> w >> h >> n;
+    int n, k; cin >> n >> k;
+    vi a(n); fo(i,0,n-1) cin >> a[i];
+    sort(all(a));
     
-    int mn = min(w,h);
-    int i = 1;
-    int j = n/i;
-    int ans = INT_MAX;
-    while(j > 0)
+    int s = 1, e = 1e18, m;
+    while(s+1 < e)
     {
-        ans = min(ans, max(w*i, j*h));
-        i++;
-        if(i > n) break;
-        j = ceil(double(n)/i);
+        m = e-(e-s)/2;
+        if(ok(m, k, a , n ))
+        {
+            e = m;
+        }
+        else s = m;
     }
-    cout << ans;
+    cout << e;
 }
 
 int32_t main()
