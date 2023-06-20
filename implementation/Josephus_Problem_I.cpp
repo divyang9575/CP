@@ -40,37 +40,40 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-
 void solve()
 {
-    int n; cin >> n ;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
-
-    fo(i,0, n-1)
-    {
-        a[i] = (a[i] % n + n ) % n; // the c++ doesn't do correct mod of negative numbers
-    }
-    vi pre(n+1); pre[0] = 0;
-    fo(i,1,n)
-    {
-        pre[i] = pre[i-1] + a[i-1];
-    }
-    int cnt = 0;
-
-    map<int, int> st;
-    fo(i,0,n)
-    {
-        if(st.find( pre[i] % n ) != st.end())
-        {
-            debug(pre[i])
-            debug(pre[i] % n)
-            cnt += st[pre[i] % n];
-        }
-        st[pre[i]%n]++;
-    }
+    int n; cin >> n;
+    vi children;
+    fo(i,1,n) children.pb(i);
     
-    cout << cnt;
+    while(children.size() > 1)
+    {
+        vi survivors;
+        fo(i,0,children.size()-1){
+            if(i % 2 == 1){
+                cout << children[i] << " ";
+            }
+            else{
+                survivors.pb(children[i]);
+            }
+        }
+
+        if(children.size() % 2 == 0)
+        {
+            children = survivors;
+        }
+        else if(children.size() & 1)
+        {
+            int last = survivors.back();
+            survivors.pop_back();
+            children.clear();
+            children.pb(last);
+            for(auto it : survivors) children.pb(it);
+        }
+    }
+    cout << children[0];
 }
+
 int32_t main()
 {fast
 #ifndef ONLINE_JUDGE

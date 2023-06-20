@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 #define M 1000000007
@@ -58,12 +58,11 @@ void solve()
         return;
     }
     ans += (mn-1) * (n-1);
-
     // for last person
     int last = amt - ans;
     int rem = last % g;
 
-    if(rem <= mn) ans += rem;
+    if(rem < mn) ans += rem;
     else{
         ans -= (g-rem);
     }

@@ -43,34 +43,38 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 void solve()
 {
-    int n; cin >> n ;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    int n; cin >> n;
+    string s, t; cin >> s >> t;
 
-    fo(i,0, n-1)
+    int cnt1 = 0;
+    fo(i,0,n-1)
     {
-        a[i] = (a[i] % n + n ) % n; // the c++ doesn't do correct mod of negative numbers
+        if(s[i] != t[i]) cnt1++;
     }
-    vi pre(n+1); pre[0] = 0;
-    fo(i,1,n)
-    {
-        pre[i] = pre[i-1] + a[i-1];
-    }
-    int cnt = 0;
-
-    map<int, int> st;
-    fo(i,0,n)
-    {
-        if(st.find( pre[i] % n ) != st.end())
-        {
-            debug(pre[i])
-            debug(pre[i] % n)
-            cnt += st[pre[i] % n];
+        if(cnt1 == 0){
+            cout << 0 << nl;
+            return;
         }
-        st[pre[i]%n]++;
+
+    int ans1 = 2*cnt1 - (cnt1 % 2);
+
+    reverse(all(t));
+    int cnt2 = 0;
+    fo(i,0,n-1)
+    {
+        if(s[i] != t[i]) cnt2++;
     }
+        if(cnt2 == 0)
+        {
+            cout << 2 << nl; return;
+        }
+        
+    int ans2 = 2*cnt2 - !(cnt2 % 2);
+
+    cout << min(ans1, ans2) << nl;
     
-    cout << cnt;
 }
+
 int32_t main()
 {fast
 #ifndef ONLINE_JUDGE
@@ -80,7 +84,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -40,37 +40,54 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+int power(int a, int b)
+{
+    int ans = 1;
+    fo(i,1,b)
+    {
+        ans *= a;
+    }
+    return ans;
+}
+
+
+void answer(int a, int b)
+{
+    cout << a << " + " << b << " = " << a+b << nl;
+}
 
 void solve()
 {
-    int n; cin >> n ;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    int A, B, C, k; cin >> A >> B >> C >> k;
 
-    fo(i,0, n-1)
+    int count = 0;
+    int valA = -1, valB = -1;
+    int leftbound;
+    int rightbound;
+    fo(a, power(10, A-1) , power(10, A)-1)
     {
-        a[i] = (a[i] % n + n ) % n; // the c++ doesn't do correct mod of negative numbers
-    }
-    vi pre(n+1); pre[0] = 0;
-    fo(i,1,n)
-    {
-        pre[i] = pre[i-1] + a[i-1];
-    }
-    int cnt = 0;
+        // for value of B
+        leftbound = max( power(10, B-1), power(10, C-1) - a);
+        rightbound = min( power(10, B) - 1 , power(10, C) - 1 - a);
 
-    map<int, int> st;
-    fo(i,0,n)
-    {
-        if(st.find( pre[i] % n ) != st.end())
+        if(leftbound > rightbound) continue;
+        int options = (rightbound-leftbound + 1);
+        
+        if(k > options)
         {
-            debug(pre[i])
-            debug(pre[i] % n)
-            cnt += st[pre[i] % n];
+            k -= options;
         }
-        st[pre[i]%n]++;
+        else{
+            valA = a;
+            valB = (leftbound-1) + k; // we have to include leftbound also
+            answer(valA, valB);
+            return;
+        }
     }
-    
-    cout << cnt;
+
+    if(valA == -1) cout << -1 << endl;
 }
+
 int32_t main()
 {fast
 #ifndef ONLINE_JUDGE
@@ -80,7 +97,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

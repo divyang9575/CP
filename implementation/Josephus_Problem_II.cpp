@@ -1,5 +1,11 @@
 #include<bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
 using namespace std;
+  
+#define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update>
+ 
 
 #define M 1000000007
 #define PI 3.1415926535897932384626433832795
@@ -43,34 +49,27 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 void solve()
 {
-    int n; cin >> n ;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
-
-    fo(i,0, n-1)
-    {
-        a[i] = (a[i] % n + n ) % n; // the c++ doesn't do correct mod of negative numbers
-    }
-    vi pre(n+1); pre[0] = 0;
+    int n, k; cin >> n >> k;
+    ordered_set<int> children;
     fo(i,1,n)
     {
-        pre[i] = pre[i-1] + a[i-1];
-    }
-    int cnt = 0;
-
-    map<int, int> st;
-    fo(i,0,n)
-    {
-        if(st.find( pre[i] % n ) != st.end())
-        {
-            debug(pre[i])
-            debug(pre[i] % n)
-            cnt += st[pre[i] % n];
-        }
-        st[pre[i]%n]++;
+        children.insert(i);
     }
     
-    cout << cnt;
+    int startingPos = 0;
+    while(children.size() > 0)
+    {
+        startingPos %= children.size();
+        int positionToRemove = (startingPos + k) % children.size();
+        startingPos = positionToRemove;
+        
+        auto pos = children.find_by_order(positionToRemove);
+        cout << *pos << " ";
+        children.erase(pos);
+    }
+    
 }
+
 int32_t main()
 {fast
 #ifndef ONLINE_JUDGE

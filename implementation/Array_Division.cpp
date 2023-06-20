@@ -40,37 +40,38 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+bool possible(int mx, int cuts, vi & a, int n)
+{
+    int cursum = 0, cut = 0;
+    fo(i,0,n-1)
+    {
+        if(a[i] > mx) return false;
+        else if(cursum + a[i] <= mx) cursum += a[i];
+        else{
+            cut++;
+            cursum = a[i];
+        }
+    }
+    return cut <= cuts-1;
+}
 
 void solve()
 {
-    int n; cin >> n ;
+    int n, k; cin >> n >> k;
     vi a(n); fo(i,0,n-1) cin >> a[i];
 
-    fo(i,0, n-1)
+    int s = 1, e = 1e17, mid;
+    while(s+1 < e)
     {
-        a[i] = (a[i] % n + n ) % n; // the c++ doesn't do correct mod of negative numbers
+        mid = e-(e-s)/2;
+        if(possible(mid, k, a, n))
+            e = mid;
+        else
+            s = mid;
     }
-    vi pre(n+1); pre[0] = 0;
-    fo(i,1,n)
-    {
-        pre[i] = pre[i-1] + a[i-1];
-    }
-    int cnt = 0;
-
-    map<int, int> st;
-    fo(i,0,n)
-    {
-        if(st.find( pre[i] % n ) != st.end())
-        {
-            debug(pre[i])
-            debug(pre[i] % n)
-            cnt += st[pre[i] % n];
-        }
-        st[pre[i]%n]++;
-    }
-    
-    cout << cnt;
+    cout << e ;
 }
+
 int32_t main()
 {fast
 #ifndef ONLINE_JUDGE
