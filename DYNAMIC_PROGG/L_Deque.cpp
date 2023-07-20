@@ -10,20 +10,23 @@ using namespace std;
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define all(a) a.begin(), a.end()
+#define precise(i) cout<<fixed<<setprecision(i)
+#define take(a,n) for(int j=0;j<n;j++) cin>>a[j]
+#define give(a,n) for(int j=0;j<n;j++) cout<<a[j]<<' '; cout << endl;
 #define vpi vector<pair<int,int>>
 #define pb push_back
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
 
 #ifndef ONLINE_JUDGE
-#define debug(x) cerr << #x <<" "; _print(x); cerr << endl;
+#define db(x) cerr << #x <<" "; _print(x); cerr << endl;
 #else
-#define debug(x)
+#define db(x)
 #endif
 void _print(int t) {cerr << t;}
 void _print(string t) {cerr << t;}
@@ -48,44 +51,40 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
+const int N = 3005;
+int dp[N][N][2]; // ans from L to R staring from player p = {0, 1}
 
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
+// X+Y = C (sum of a)
+// X-Y = 2*X - C  -> depends on only on X
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    int n; cin >> n;
+    vi a(n); 
+    int sum = 0;
+    fo(i,0,n-1){
+        cin >> a[i];
+        sum += a[i];
+    }
+    // a.pb(0); // a[n] = 0  
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
+    fo(i, 1, n){
+        dp[i][i][0] = a[i-1];    // first player picked
+        dp[i][i][1] = 0;      // second player picked the elem means x = 0
+    }
 
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
+    rfo(L, n, 1)
+    {
+        fo(R, L+1, n)
+        {
+            dp[L][R][0] = max(a[L-1] + dp[L+1][R][1], a[R-1] + dp[L][R-1][1] );
+            dp[L][R][1] = min( dp[L+1][R][0],  dp[L][R-1][0] );
+        }
+    }
 
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    int ans = 2 * dp[1][n][0] - sum ;
+
+    cout << ans ;
     
 }
 

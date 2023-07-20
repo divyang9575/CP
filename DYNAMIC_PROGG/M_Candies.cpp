@@ -10,20 +10,23 @@ using namespace std;
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define all(a) a.begin(), a.end()
+#define precise(i) cout<<fixed<<setprecision(i)
+#define take(a,n) for(int j=0;j<n;j++) cin>>a[j]
+#define give(a,n) for(int j=0;j<n;j++) cout<<a[j]<<' '; cout << endl;
 #define vpi vector<pair<int,int>>
 #define pb push_back
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
 
 #ifndef ONLINE_JUDGE
-#define debug(x) cerr << #x <<" "; _print(x); cerr << endl;
+#define db(x) cerr << #x <<" "; _print(x); cerr << endl;
 #else
-#define debug(x)
+#define db(x)
 #endif
 void _print(int t) {cerr << t;}
 void _print(string t) {cerr << t;}
@@ -48,45 +51,68 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
+const int N = 105;
+const int K = 1e5+5;
+int maxcandies[N];
+int dp[N][K];
+int pre[K];
+int n, k;
 
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
+// int func(int ind, int candiesleft )
+// {
+//     if(candiesleft == 0 && ind == 0){
+//         return 1;
+//     }
+//     if(ind == 0) return 0;
+
+//     if(dp[ind][candiesleft] != -1) return dp[ind][candiesleft];
+
+//     int ans = 0;
+//     for(int i = 0; i <= maxcandies[ind] ; i++){
+//         if(candiesleft - i >= 0)
+//         ans = (ans % M + func(ind-1, candiesleft - i) % M) % M ;
+//     }
+
+//     return dp[ind][candiesleft] = ans;
+// }
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    cin >> n >> k;
+    fo(i,1,n) cin >> maxcandies[i]; 
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
-
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
-
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    // memset(dp);
     
+    // int ans = func(n, k);
+    // cout << ans << nl;
+
+    fo(i,1,k){
+        dp[0][i] = 0;
+    }
+    fo(i,0,n){
+        dp[i][0] = 1;
+    }
+
+
+    fo(i,1,n)
+    {
+        // calc pre array
+        pre[0] = dp[i-1][0];
+        fo(x, 1, k){
+            pre[x] = (pre[x-1] + dp[i-1][x]) % M;
+        }
+        fo(j,1,k)
+        {
+            // give candies
+            int mx = maxcandies[i];
+            if(j - mx - 1 >= 0)
+            dp[i][j] = ( (pre[j] + M) - pre[j - mx - 1]) % M;
+            else
+            dp[i][j] = pre[j] ;
+        }
+    }
+
+    cout << dp[n][k] << nl;
 }
 
 int32_t main()

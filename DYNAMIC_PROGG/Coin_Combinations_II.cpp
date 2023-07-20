@@ -47,30 +47,25 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
-int dp[105][1000005];
-int n, sum;
-vi a(104);
-int func(int ind, int sum)
-{
-    if(dp[ind][sum] != -1) return dp[ind][sum];
-    if(ind == 1) return dp[ind][sum] = !(sum % a[ind]);
-    if(ind <= 0) return 0;
-    if(sum == 0) return 1;
 
-    int ways = 0;
-    ways += func(ind-1, sum);
-    if(sum - a[ind] >= 0)
-    ways += func(ind, sum - a[ind]);
-
-    return dp[ind][sum] = ways;
-}
 
 void solve()
 {
-    cin >> n >> sum;
-    fo(i,1,n) cin >> a[i];
-    memset(dp);
-    cout << func(n, sum);
+    int n , sum; cin >> n>> sum;
+    vi a(n);
+    fo(i,0,n-1) cin >> a[i];
+    
+    int dp[sum+1] = {0};
+    dp[0] = 1;
+    fo(ind,0,n-1){
+        fo(amt, 1, sum){
+            if(amt - a[ind] >= 0)
+            dp[amt] += dp[amt - a[ind]];
+            dp[amt] %= M;
+        }
+    }
+    cout << dp[sum];
+    
 }
 
 int32_t main()

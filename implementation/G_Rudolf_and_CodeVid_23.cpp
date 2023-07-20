@@ -15,7 +15,7 @@ using namespace std;
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
@@ -48,44 +48,64 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
+class med{
+    public:
+        int days, index;
+        int cure = 0, effect = 0;
 
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
+        med(int d, string c, string e, int i){
+            days = d; index = i; 
+            int n = sz(c);
+            fo(i,0,n-1){
+                cure += ((c[i]-'0' )<< (n-i-1));
+            }
+            fo(i,0,n-1){
+                effect += ((e[i]-'0' )<< (n-i-1));
+            }
+        };
+};
+
+int f(int sym ,int din, vector<med> &dawai, int m, set<int> &st)
+{
+    if(sym == 0) return din;
+    if(st.size() == m) return (int)1e9;
+
+    int ans = 1e9;
+    fo(i,0,m-1){
+        if(st.find(dawai[i].index) != st.end()) continue;
+        
+        st.insert(dawai[i].index);
+        int temp = sym;
+        temp = (temp & (~dawai[i].cure)) | dawai[i].effect;
+        ans = min(ans,  f(temp, dawai[i].days + din, dawai, m, st));
+        st.erase(dawai[i].index);
     }
-    return dp[sum] = ways;
+    if(ans >= 1e9) return -1;
+    else return ans;
 }
+
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    int n, m; cin >> n >> m;
+    string s; cin >> s;
+    int sym = 0;
+    fo(i,0,n-1){
+        sym += ((s[i]-'0' )<< (n-i-1));
+    }
+    debug(sym)
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
+    vector<med> dawai;
+    fo(i,0,m-1){
+        int d; cin >> d;
+        string a, b; cin >> a >> b;
+        med newitem(d, a, b, i+1);
+        dawai.pb(newitem);
+    }
 
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
-
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    set<int> st;
+    int ans = f(sym, 0, dawai, m, st);
+    cout << ans << nl;
     
 }
 
@@ -98,7 +118,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

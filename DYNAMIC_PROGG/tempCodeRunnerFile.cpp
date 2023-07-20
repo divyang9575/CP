@@ -1,1 +1,2 @@
-if(sum - a[ind] >= 0)
+
+    if(x == n-1) dn = false;

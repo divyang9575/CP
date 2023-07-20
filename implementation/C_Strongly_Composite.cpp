@@ -15,7 +15,7 @@ using namespace std;
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
@@ -48,45 +48,39 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
-
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
+    int n; cin >> n;
     vi a(n); fo(i,0,n-1) cin >> a[i];
+    debug(n) debug(a)
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
+    map<int, int> div;
+    fo(i,0,n-1){
+        for(int j = 2; j*j <= a[i]; j++){
+            while(a[i] % j == 0){
+                div[j]++;
+                a[i] /= j;
+            }
+        }
 
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
+        if(a[i] != 1) div[a[i]]++;
+    }
+    debug(div)
+    int k = 0;
+    int cnt = 0;
+    for (auto prime : div){
+        k += prime.ss / 2;
+        debug(k)
+        if(prime.ss & 1){
+            cnt++;
+        }
+    }
+    k += cnt / 3;
+    debug(k)
+    cout << k << nl;
+    debug(k)
 
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
-    
 }
 
 int32_t main()
@@ -97,8 +91,9 @@ freopen("output.txt", "w", stdout);
 freopen("error.txt", "w", stderr);
 #endif
 
+   
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

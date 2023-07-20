@@ -1,65 +1,43 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define mod 1000000007
-#define PI 3.1415926535897932384626433832795
-#define endl '\n'
+#define nl '\n'
 #define int long long int
 #define vi vector<int>
-#define sort(a,all) sort(a.begin(), a.end())
-#define vpi vector<pair<int,int>>
-#define pb push_back
-#define pi pair<int,int>
-#define ff first
-#define ss second
+#define take(a,n) for(int j=1;j<=n;j++) cin>>a[j]
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
 
-const int N = 1e5 + 10;
-int dp[3][N];
-
-int func(int index, int row, vector<vi> &abc)
-{
-    if(row >= abc.size()) return 0;
-
-    if(dp[index][row] != -1) return dp[index][row];
-
-    if(index == 0)
-    {
-        return dp[index][row] = max(abc[row][1] + func(1,row+1 ,abc), abc[row][2] + func(2,row+1 ,abc) ); 
-    }
-    if(index == 1)
-    {
-        return dp[index][row] = max(abc[row][0] + func(0,row+1 ,abc), abc[row][2] + func(2,row+1 ,abc) ); 
-    }
-    if(index == 2)
-    {
-        return dp[index][row] = max(abc[row][0] + func(0,row+1 ,abc), abc[row][1] + func(1,row+1 ,abc) ); 
-    }
-}
+const int N = 2e5;
+int dp[N][3];
 
 void solve()
 {
-    memset(dp, -1, sizeof(dp));
-
     int n; cin >> n;
-    vector<vi> abc;
-    fo(i,0,n-1) 
-    {
-        vi temp(3);
-        cin >> temp[0] >> temp[1] >> temp[2];
-        abc.pb(temp);
+    vector<vi> vac(n+1, vi(3, 0));
+    fo(i,1,n){
+        int a, b, c; cin >> a >> b >> c;
+        vac[i] = {a, b, c};
     }
-    
-    int ans = max(max(abc[0][0] + func(0, 1, abc), abc[0][1] + func(1, 1, abc)), abc[0][2] + func(2, 1, abc));
-    
-    cout << ans;
-    
+
+    dp[0][0] = dp[0][1] = dp[0][2] = 0;
+    fo(i, 1, n){
+        fo(j,0,2){
+            dp[i][0] = vac[i][0] + max(dp[i-1][1], dp[i-1][2]);
+            dp[i][1] = vac[i][1] + max(dp[i-1][0], dp[i-1][2]);
+            dp[i][2] = vac[i][2] + max(dp[i-1][0], dp[i-1][1]);
+        }
+    }
+    cout << max({dp[n][0], dp[n][1], dp[n][2]}) << nl;
 }
 
 int32_t main()
 {fast
-    solve();
+    int t = 1;
+    // cin >> t;
+    while(t--){
+        solve();
+    }
     return 0;
 }

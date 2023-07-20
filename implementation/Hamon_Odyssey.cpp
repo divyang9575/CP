@@ -15,7 +15,7 @@ using namespace std;
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
@@ -48,45 +48,36 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
-
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
+    int n; cin >> n;
     vi a(n); fo(i,0,n-1) cin >> a[i];
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
-
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
-
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    int andd = a[0];
+    fo(i,1,n-1){
+        andd &= a[i];
+    }
+    if(andd > 0){
+        cout << 1 << endl;
+        return ;
+    }
     
+    int cnt = 0;
+    int cur = a[0];
+    int i = 0;
+    while(i < n){
+        cur &= a[i];
+        if(cur == 0){
+            cnt++;
+            cur = 0;
+        }
+        i++;
+        if(cur == 0 && i < n){
+            cur = a[i];
+        }
+    }
+    cout << cnt << nl;
 }
 
 int32_t main()
@@ -98,7 +89,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

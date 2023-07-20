@@ -15,7 +15,7 @@ using namespace std;
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
@@ -48,44 +48,36 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
-
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    int n, rem, add; cin >> n >> rem >> add;
+    set<int> st;
+    int cost = 2e18, basecost = 0;
+    fo(i,0,n-1){
+        int x; cin >> x;
+        if(st.count(x)) basecost += rem;
+        else st.insert(x);
+    }
+    debug(n) debug(rem) debug(add) debug(st) debug(cost)
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
+    vi elems = {0};
+    if(*st.begin() != 1){
+        elems.pb(1);
+        basecost += add;
+    }
+    for(auto e : st){
+        elems.pb(e);
+    }
+    int m = sz(elems)-1;
+    debug(elems)
 
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
+    fo(i,1,m){  // i elems of original array will stay and we add and remove other elems
+        cost = min(cost, (elems[i] - i)*add + (m - i)*rem);
+    }
 
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    cout << cost + basecost << nl;
+    debug(cost)
     
 }
 
@@ -98,7 +90,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -15,7 +15,7 @@ using namespace std;
 #define pi pair<int,int>
 #define ff first
 #define ss second
-// #define memset(dp) memset(dp , -1, sizeof(dp))
+#define memset(dp) memset(dp , -1, sizeof(dp))
 #define fo(i,s,e) for(int i=s; i<=e; i++)
 #define rfo(i,e,s) for(int i=e; i>=s; i--)
 #define fast ios_base::sync_with_stdio(false),cin.tie(nullptr),cout.tie(nullptr);
@@ -47,45 +47,43 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
+// int dp[1005][100005];
+// int f(int ind, int mxMoney, vi&price, vi&pages)
+// {
+//     if(mxMoney == 0 || ind == 0) return 0;
+//     if(dp[ind][mxMoney] != -1) return dp[ind][mxMoney];
+//     int page = f(ind-1, mxMoney, price, pages);
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
+//     if(mxMoney - price[ind-1] >= 0)
+//     page = max(page, pages[ind-1] + f(ind-1, mxMoney - price[ind-1], price, pages));
 
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
-
+//     return dp[ind][mxMoney] = page;
+// }
+int dp[1005][100005], price[1005], pages[1005];
+int n, x;
 void solve()
 {
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+    cin >> n >> x;
+    fo(i,0,n-1) cin >> price[i];
+    fo(i,0,n-1) cin >> pages[i];
+    // memset(dp);
+    // cout << f(n, x, price, pages);
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
+    int dp[n+1][x+1];
+    fo(i,0,n){
+        fo(j,0,x){
+             dp[i][j] = 0;
+        }
+    }
 
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
-
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    fo(ind, 1, n){
+        fo(money, 1, x){
+            dp[ind][money] = dp[ind-1][money];
+            if(money - price[ind-1] >= 0)
+                dp[ind][money] = max(dp[ind][money], pages[ind-1] + dp[ind-1][money - price[ind-1]]);
+        }
+    }
+    cout << dp[n][x];
     
 }
 

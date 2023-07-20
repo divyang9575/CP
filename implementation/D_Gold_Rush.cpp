@@ -47,45 +47,27 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
-
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
-
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
+bool rec(int n, int m){
+    if(n == m){
+        return true;
     }
-    return dp[sum] = ways;
+    if(n%3 != 0) return false;
+    else{
+        return (rec(n/3, m) || rec(n/3 * 2, m));
+    }
 }
 
 void solve()
 {
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
-
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
-
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
-
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
- 
+    
+    int n, m; cin >> n >>m;
+    if(m > n){
+        no; return;
+    }
+    if(rec(n, m)){
+        yes;
+    }
+    else no;
     
 }
 
@@ -98,7 +80,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }
