@@ -12,7 +12,8 @@
     "initializer_list": "cpp",
     "regex": "cpp",
     "valarray": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "tuple": "cpp"
   },
   "cph.general.onceMaintainerMessage": false
 }
