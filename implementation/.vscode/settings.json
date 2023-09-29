@@ -13,7 +13,9 @@
     "regex": "cpp",
     "valarray": "cpp",
     "thread": "cpp",
-    "tuple": "cpp"
+    "tuple": "cpp",
+    "cstdlib": "cpp",
+    "cmath": "cpp"
   },
   "cph.general.onceMaintainerMessage": false
 }

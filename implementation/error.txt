@@ -1,16 +1,62 @@
-arr [ 2 5 7 ]
-cnt 1
-arr [ 3 5 8 9 ]
-cnt 0
-arr [ 2 8 9 10 11 ]
-cnt 3
-arr [ 6 8 15 24 29 31 ]
-cnt 2
-arr [ 6 8 12 20 27 31 ]
-cnt 2
-arr [ 1 2 3 4 5 6 7 8 9 ]
-cnt 3
-arr [ 1 2 3 ]
-cnt 2
-arr [ 57008429 66778899 837653445 1000000001 ]
-cnt 0
+n 4
+len 1
+mn 4
+mx 4
+len 2
+mn 2
+mx 6
+len 2
+mn 2
+mx 4
+len 1
+mn 2
+mx 2
+n 5
+len 1
+mn 4
+mx 4
+len 1
+mn 10
+mx 10
+len 2
+mn 4
+mx 8
+len 1
+mn 8
+mx 8
+len 2
+mn 4
+mx 4
+len 3
+mn 4
+mx 8
+len 2
+mn 4
+mx 8
+len 1
+mn 4
+mx 4
+len 2
+mn 4
+mx 4
+len 3
+mn 4
+mx 8
+len 2
+mn 4
+mx 8
+len 3
+mn 4
+mx 4
+len 4
+mn 4
+mx 8
+len 3
+mn 4
+mx 8
+len 2
+mn 4
+mx 4
+len 1
+mn 4
+mx 4

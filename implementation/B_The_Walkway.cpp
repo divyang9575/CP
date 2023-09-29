@@ -27,6 +27,7 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 
 template<class T> using pq = priority_queue<T>;
 template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
+
 #define yes cout << "YES" << endl
 #define no cout << "NO" << endl
 #define M 1000000007
@@ -63,38 +64,29 @@ void solve()
         cin >> arr[i];
         cuk[arr[i]] = 1;
     }
+    
+    arr.insert(arr.begin(), 1-d);
     arr.pb(n+1);
+    int ans = 0;
+    // for first
 
-        cuk[1] = 1;
-        int last = 1;
-    for(int i = 1; i<=n; i++){
-        if(cuk[i] = 1) last = i;
-        else{
-            if(i-last == d){
-                cuk[i] = 1;
-                last = i;
-            }
-        }
-    }
 
-    int cnt = 0;
-    db(arr)
-    for(int i=0; i<m; i++){ 
-        int next = arr[i+1];
-        int places = next-arr[i]-1;
-        // db(next) db(places)
+    fo(i,1,n){
+        // remove
+        int left = (arr[i]-arr[i-1]-1)/d;
+        int right = (arr[i+1]-arr[i]-1)/d;
 
-        int cook = 1 + places / d;
-        int without = (places + 1 )/ d ;
-        // db(cook) db(without)
-        if(arr[i]-d >0 && cuk[arr[i] - d] == 1){
-            without++;
+        //add
+        int mid = (arr[i+1]-arr[i-1]-1)/d;
+
+        int diff = (left+right+1) - mid;
+        if(diff > 0){
+            ans++;
         }
 
-        if(without < cook ) cnt++;
-        // db(cnt)
     }
-    db(cnt)
+        db(ans)
+    cout << ans << nl;
     
 }
 

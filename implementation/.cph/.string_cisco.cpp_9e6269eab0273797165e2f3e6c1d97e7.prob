@@ -1,0 +1,1 @@
+{"name":"Local: string_cisco","url":"d:\\CP\\CP\\implementation\\string_cisco.cpp","tests":[{"id":1693896664781,"input":"6\naabaac","output":"3"},{"id":1693898247432,"input":"6\nabacda","output":"4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\CP\\CP\\implementation\\string_cisco.cpp","group":"local","local":true}
