@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,53 +47,36 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+const int N = 2e5 + 5;
+const int INF = 1e15;
+
+int dp[N];
+
+int n;
+vi arr(N);
+int f(int i){
+    if(i > n) return INF;
+    if(i == n) return 0;
+
+    if(dp[i] != -1) return dp[i];
+
+    int dist = arr[i] + 1;
+    int notake = f(i + dist) ;
+    int take = 1 + f(i+1);
+
+    return dp[i] = min(take, notake) ;
+}
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    cin >> n;
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
     }
-    db(arr)
+    memset(dp, -1, sizeof dp);
+    int ans = f(0);
 
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
-    }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
-    
+    cout << ans << endl;
 }
 
 int32_t main()
@@ -106,7 +88,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

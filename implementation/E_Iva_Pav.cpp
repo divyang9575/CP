@@ -47,57 +47,135 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-bool possible(int R, vi &arr, int prebits[][32] , int n, int L, int K){
-    int val = 0;
-    for(int i=0; i<32; i++){
-        if(prebits[R][i] - prebits[L-1][i] == R - L + 1 ){
-            val += (1 << i) ;
-        }
-    }
-    return val >= K ;
-}
+// SOLVE using SEGMENT TREE
 
-void solve()
-{
-    int n; cin >> n;
-    vi arr(n); 
-    for(int i=0; i<n; i++){
-        cin >> arr[i];
-    }
+class SGTree{
+    public:
+        vector<int> seg;
+
+        int combine(int a, int b){
+            return (a & b) ;
+        }
     
-    int prebits[n+1][32] ;
-    memset(prebits, 0, sizeof prebits) ;
-
-    for(int i=0; i<n; i++){
-        for(int j=0; j<32; j++){
-            if(arr[i] & (1<<j)){
-                prebits[i+1][j] += 1;
-            }
-            prebits[i+1][j] += prebits[i][j];
+        SGTree(int n){
+            seg.resize(4 * n + 1);
         }
-    }
+        void build(int i, int low, int high, vi & arr){
+            if(low == high){
+                seg[i] = arr[low];
+                return;
+            }
+
+            int mid = (low + high) / 2;
+            build(2*i+1, low, mid, arr);
+            build(2*i+2, mid+1, high, arr);
+            seg[i] = combine(seg[2*i+1], seg[2*i+2]);
+        }
+
+        int query(int i, int low, int high, int l, int r, vi & arr){
+            // l low high r
+            if(low >= l && high <= r){
+                return seg[i];
+            }
+
+            // l r lo hi (or) lo hi l r
+            if(r < low || l > high) return ((1<<30)-1); // mask
+
+            int mid = (low + high) / 2;
+            int left = query(2*i+1, low, mid, l, r, arr);
+            int right = query(2*i+2, mid+1, high, l, r, arr);
+            return combine(left, right);
+        }
+
+};
+
+void solve(){
+    int n; cin >> n;
+    vi arr(n);
+    for(int i=0; i<n; i++) cin >> arr[i];
+
+    SGTree sgt(n);
+    sgt.build(0, 0, n-1, arr);
+    db(sgt.seg[0])
 
     int q; cin >> q;
-    vi answer ;
+    vi answer;
     while(q--){
-        int L, K ; cin>> L >> K;
-
-        int lo = L, hi = n, mid, ans = -1 ;
-        while(lo <= hi)
-        {
-            mid = hi - (hi - lo) / 2 ;
-            if(possible(mid, arr, prebits, n, L, K)){
-                lo = mid + 1;
+        int l, k; cin >> l >> k;
+        l--;
+        
+        int lo = l, hi = n-1, mid, ans = -1;
+        while(lo <= hi){
+            mid = (lo + hi) / 2;
+            db(l) db(mid)
+            db(sgt.query(0, 0, n-1, l, mid, arr))
+            if(sgt.query(0, 0, n-1, l, mid, arr) >= k){
                 ans = mid;
+                lo = mid+1;
             }
             else{
-                hi = mid - 1;
+                hi = mid-1;
             }
         }
-        answer.push_back(ans) ;
+        if(ans != -1) ans++;
+        answer.push_back(ans);
     }
-    give(answer, answer.size()) ;
+    give(answer, answer.size());
+    // cout << cntbits((1<<30)-1) << endl;
 }
+
+
+// bool possible(int R, vi &arr, int prebits[][32] , int n, int L, int K){
+//     int val = 0;
+//     for(int i=0; i<32; i++){
+//         if(prebits[R][i] - prebits[L-1][i] == R - L + 1 ){
+//             val += (1 << i) ;
+//         }
+//     }
+//     return val >= K ;
+// }
+
+// void solve()
+// {
+//     int n; cin >> n;
+//     vi arr(n); 
+//     for(int i=0; i<n; i++){
+//         cin >> arr[i];
+//     }
+    
+//     int prebits[n+1][32] ;
+//     memset(prebits, 0, sizeof prebits) ;
+
+//     for(int i=0; i<n; i++){
+//         for(int j=0; j<32; j++){
+//             if(arr[i] & (1<<j)){
+//                 prebits[i+1][j] += 1;
+//             }
+//             prebits[i+1][j] += prebits[i][j];
+//         }
+//     }
+
+//     int q; cin >> q;
+//     vi answer ;
+//     while(q--){
+//         int L, K ; cin>> L >> K;
+
+//         int lo = L, hi = n, mid, ans = -1 ;
+//         while(lo <= hi)
+//         {
+//             mid = hi - (hi - lo) / 2 ;
+//             if(possible(mid, arr, prebits, n, L, K)){
+//                 lo = mid + 1;
+//                 ans = mid;
+//             }
+//             else{
+//                 hi = mid - 1;
+//             }
+//         }
+//         answer.push_back(ans) ;
+//     }
+//     give(answer, answer.size()) ;
+// }
 
 int32_t main()
 {fast

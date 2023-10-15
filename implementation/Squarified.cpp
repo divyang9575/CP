@@ -123,33 +123,65 @@ using pqg = priority_queue<T, vector<T>, greater<T>>;
 // binary search ? dp ? change observation..
 // edge cases ? overflow ? limits ?
 
+const int N = 1e7 + 5;
+vector<int> primes;
+int isprime[N];
+int spf[N];
+void sieve(){
+    spf[1] = 1;
+    for(int i=2; i<N; i++){
+        if(isprime[i] == 0){
+            primes.push_back(i);
+            spf[i] = i;
+            for(int j = i*i;j<N;j+=i){
+                isprime[j] = 1; 
+                spf[j] = i;
+            }
+        }
+    }
+    return;
+}
+
+
+
+const int INF = 1e17;
+
 void solve()
 {
-    int n, k; cin >> n;
+    int n;
+    cin >> n;
     vi arr(n);
-    for(int i=0; i<n; i++) cin >> arr[i] ;
-    cin >> k ;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+    int ans = -INF;
+    map<int, int> subs;
+    for (int i = 0; i < n; i++)
+    {
+        int num = 1 ;
+        while(arr[i] != 1){
+            int div = spf[arr[i]] ;
+            int cnt = 0;
 
-    for(int i=n-2; i>=0; i--){
-        if(arr[i] > arr[i+1]){
-            arr[i] = arr[i+1];
+            while(arr[i] % div == 0){
+                arr[i] /= div ;
+                cnt++;
+            }
+            if(cnt & 1){
+                num *= div ;
+            }
+        }
+        if(num != 1) {
+            subs[num]++;
+            ans = max(ans, subs[num]) ;
         }
     }
-    arr.insert(arr.begin(), 0);
-    db(arr)
 
-    vi ans(n, 0);
-    int val = k;
-    for(int i=1; i<=n; i++){
-        int coins = arr[i] - arr[i-1] ;
-        if(coins > 0){
-            val = min(val, k / coins) ;
-            k -= val * coins ;
-        }
-        ans[i-1] = val;
-    }
-    db(ans)
-    give(ans, ans.size());
+    if (ans == -INF)
+        cout << "0\n";
+    else
+        cout << ans << endl;
 }
 
 int32_t main()
@@ -161,6 +193,7 @@ int32_t main()
     freopen("error.txt", "w", stderr);
 #endif
 
+    sieve();
     int t = 1;
     cin >> t;
     while (t--)

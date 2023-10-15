@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,52 +47,47 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+const int mod = 998244353 ;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
+    int n; cin >> n;
+    vi arr(n); 
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
+    }
+
+    int ans = 0;
+    for(int j=0; j<30; j++)
+    {
+        int pref = 0, evensum = 0, oddsum = 0, oddcnt = 0, evencnt = 1 ;
+        int tempans = 0 ;
+
+        for(int i=0; i<n; i++)
+        {
+            pref ^= (arr[i]>>j & 1) ;
+
+            if(pref == 1){ // oddbits
+                tempans = (tempans + ( evencnt * (i+1) - evensum )%mod)%mod;
+                oddcnt++ ;
+                oddsum += i+1 ;
+                oddsum %= mod ;
+            }
+            else
+            {
+                tempans = (tempans + ( oddcnt * (i+1) - oddsum )%mod)%mod;
+                evencnt++ ;
+                evensum += i+1 ;
+                evensum %= mod ;
+            }
+        }
+        db(tempans) db(arr)
+
+        ans += ( (tempans) * (1<<j) ) % mod;
+        ans %= mod ;
+    }
     
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
-    }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+    cout << ans << endl;
     
 }
 

@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,52 +47,51 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+const int N = 1e6 + 5;
+int isprime[N];
+int spf[N];
+void sieve(){
+    spf[1] = 1;
+    for(int i=2; i<N; i++){
+        if(isprime[i] == 0){
+            spf[i] = i;
+            for(int j = i*i;j<N;j+=i){
+                isprime[j] = 1; 
+                spf[j] = i;
+            }
+        }
+    }
+    return;
+}
+
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    int n; cin >> n;
+    vi arr(n); 
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
+    map<int, int> mp;
 
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
+    for(auto num : arr)
+    {
+        int cnt = 0;
+        int x = spf[num];
+        while(num != 1){
+            mp[x]++;
+            num /= x ;
+            x = spf[num] ;
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+
+    for(auto it : mp){
+        if(it.second % n != 0){
+            no; return;
+        }
+    }
+    yes;
     
 }
 
@@ -104,9 +102,9 @@ freopen("input.txt", "r", stdin);
 freopen("output.txt", "w", stdout);
 freopen("error.txt", "w", stderr);
 #endif
-
+    sieve();
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

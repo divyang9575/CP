@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -51,49 +50,33 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    int n; cin >> n;
+    vi W(n), A(n); 
+    for(int i=0; i<n; i++){
+        cin >> W[i];
     }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
+    for(int i=0; i<n; i++){
+        cin >> A[i];
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+
+    vi predif(n+1, 0), sufdif(n+2, 0);
+    for(int i=0;i<n; i++){
+        predif[i+1] = max(A[i], predif[i]) - W[i];
+    }
+    for(int i=n-1; i>=0; i--){
+        sufdif[i+1] = max(A[i] , sufdif[i+2]) - W[i];
+    }
+    db(predif) db(sufdif)
+
+    vi ans(n);
+    for(int i=0; i<n; i++){
+        int rdiff = sufdif[i+2];
+        int ldiff = predif[i];
+        int need = rdiff + ldiff ;
+        
+        ans[i] = max(need, A[i]) - W[i] ;
+    }
+    give(ans, n);
     
 }
 
@@ -106,7 +89,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -31,9 +30,9 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 #define yes cout << "YES" << endl
 #define no cout << "NO" << endl
-#define M 1000000007
+// #define M 1000000007
 #define PI 3.1415926535897932384626433832795
-#define cntbits(x) __builtin_popcount(x)
+#define bitcount(x) __builtin_popcount(x)
 #define int long long int
 #define vi vector<int>
 #define vvi vector<vector<int>>
@@ -51,50 +50,32 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
+    int N, M; cin >> N >> M;
 
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    if(N%M == 0){
+        cout <<"0\n";
+        return ;
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
+    int n = N / __gcd(N, M);
+    int m = M / __gcd(N, M);
 
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
+    if( bitcount(m) > 1 ){
+        cout << "-1\n" ;
+        return ;
+    }
+    
+    int ans = 0, op = 35;
+    while(op--){
+        n %= m ;
+        ans += n ;
+        n *= 2 ;
+        if(n == m){
+            cout << ans * __gcd(N, M) << endl;
+            return ;
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
-    
+    cout << "-1\n" ;
 }
 
 int32_t main()
@@ -106,7 +87,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

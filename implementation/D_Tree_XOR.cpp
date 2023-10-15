@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -47,53 +46,71 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
+const int N = 2e5 + 5;
+int dp[N] ;
+int n;
 
+void childDFS(int v, int p, vi &childs, vi tree[]){
+    for(auto u : tree[v]){
+        if(u == p) continue;
+        childDFS( u, v, childs, tree);
+        childs[v] += childs[u];
+    }
+}
+
+void DFS(int v, int p, vi &childs, vi tree[], vi &arr){
+    for(auto u : tree[v]){
+        if(u == p) continue;
+        DFS(u, v, childs, tree, arr) ;
+        dp[v] += (dp[u] + (arr[v] ^ arr[u]) * childs[u] ) ;
+    }
+}
+
+void AnsDFS(int v, int p, vi &childs, vi tree[], vi &arr, vi &ans){
+    for(auto u : tree[v]){
+        if(u == p) continue;
+        
+        dp[v] -= (dp[u] + (arr[v] ^ arr[u]) * childs[u] ) ;
+        dp[u] += (dp[v] + (arr[v] ^ arr[u]) * (n - childs[u])) ;
+        ans[u] = dp[u] ;
+
+        AnsDFS(u, v, childs, tree, arr, ans) ;
+        // correct all values
+        dp[u] -= (dp[v] + (arr[v] ^ arr[u]) * (n - childs[u])) ;
+        dp[v] += (dp[u] + (arr[v] ^ arr[u]) * childs[u] ) ;
+    }
+}
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    cin >> n;
+    vi arr(n); 
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
+    vi tree[n] ;
+    for(int i=1; i<=n-1; i++){
+        int u, v; cin >> u >> v;
+        u--, v-- ;
+        tree[u].push_back(v);
+        tree[v].push_back(u);
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+
+    // store counts of childs
+    vi childs(n, 1) ;
+    childDFS(0, -1, childs, tree) ;
+
+    // pre calculate dp for one root
+    memset(dp, 0, sizeof dp) ;
+    DFS(0, -1, childs, tree, arr) ;
+
+    vi ans(n) ;
+    ans[0] = dp[0] ;
+
+    // calculating for all roots
+    AnsDFS(0, -1, childs, tree, arr, ans) ;
+    give(ans, ans.size()) ;
     
 }
 
@@ -106,7 +123,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

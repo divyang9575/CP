@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,54 +47,85 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-
-void solve()
-{
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
-    }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
-    
+bool cmp(pi a, pi b){
+    if(a.first == b.first) return a.second > b.second ;
+    return a.first < b.first ;
 }
+bool cmp2(pair<double, int> a, pair<double, int> b){
+    if(a.first == b.first) return a.second > b.second ;
+    return a.first < b.first ;
+}
+
+int f(int i, int left, vi &people, vi &cost, int n,int p){
+    if(left == 0) return 0 ;
+    if(i >= n) return 1e11 ;
+
+    int c = 0;
+    int notake = f(i+1, left, people, cost, n, p) ;
+    int take = p + cost[i] * min(people[i], left) + f(i+1, left - min(people[i], left)-1 , people, cost, n, p) ;
+    return min(notake, take) ;
+
+}
+
+void solve(){
+    int n, p; cin >> n >> p;
+    vi arr(n), brr(n) ;
+    for(int i=0; i<n; i++){
+        cin >> arr[i] ;
+    }
+    for(int i=0; i<n; i++){
+        cin >> brr[i] ;
+    }
+    int ans = f(0, n, arr, brr, n, p) ;
+    cout << ans << endl;
+}
+
+// void solve()
+// {
+//     int n, p; cin >> n >> p;
+//     vpi arr(n); 
+//     for(int i=0; i<n; i++){
+//         cin >> arr[i].second ;
+//     }
+//     for(int i=0; i<n; i++){
+//         cin >> arr[i].first ;
+//     }
+
+//     sort(all(arr), cmp) ;
+//     int sum = 0;
+
+//     vector<pair<double, int>> val ;
+//     for(int i=0; i<n; i++){
+//         double c = (arr[i].first * arr[i].second + p) / (1.0 + arr[i].second) ;
+//         val.push_back({c, i }) ;
+
+//     }
+//     db(val)
+//     sort(all(val), cmp2) ;
+//     vector<int> vis(n, 0);
+//     int total = 0;
+//     for(auto it : val){
+//         if(total + arr[it.second].second <= n){
+//             total += arr[it.second].second ;
+//             vis[it.second] = 1;
+//             sum += p + arr[it.second].second * arr[it.second].first ;
+//         }
+//         else{
+//             int left = n - total ;
+//             vector<pair<double, int>> val2;
+//             for(int i=0; i<n; i++){
+//                 if(vis[i] == 0){
+//                     double c = (arr[i].first * min(arr[i].second, left) + p) / (1.0 + min(arr[i].second, left));
+//                     val2.push_back({c, i});
+//                 }
+//             }
+//             sort(all(val2), cmp2);
+
+//         }
+//     }
+
+//     cout << sum << endl;
+// }
 
 int32_t main()
 {fast
@@ -106,7 +136,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

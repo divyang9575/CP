@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -31,7 +30,7 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 #define yes cout << "YES" << endl
 #define no cout << "NO" << endl
-#define M 1000000007
+// #define M 998244353
 #define PI 3.1415926535897932384626433832795
 #define cntbits(x) __builtin_popcount(x)
 #define int long long int
@@ -48,52 +47,43 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-
+const int M = 998244353 ;
+long long binpow(long long a, long long b, long long m) {
+    a %= m;
+    long long res = 1;
+    while (b > 0) {
+        if (b & 1)
+            res = res * a % m;
+        a = a * a % m;
+        b >>= 1;
+    }
+    return res;
+}
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    int n; cin >> n;
+    vi arr(n+1); 
+    vi mx(n+1, INT_MIN) ;
+    for(int i=1; i<=n; i++){
+        cin >> arr[i];
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
 
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
+    for(int i=1; i<=n; i++)
+    {
+        for(int j=i; j<=n; j+=i){
+            mx[i] = max(mx[i], arr[j]);
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+
+    sort(mx.begin()+1, mx.end(), greater<int>()) ;
+    db(mx)
+
+    int ans = 0;
+    for(int i=1; i<=n; i++){
+        ans = ( (ans + (binpow(2, n-i,M) * mx[i])%M ) ) % M ;
+    }
+    cout << ans << endl;
     
 }
 

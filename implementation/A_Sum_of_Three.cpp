@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -51,49 +50,21 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
+    int n; cin >> n;
 
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    if(n < 7 || n == 9){
+        no; return ;
     }
-    db(arr)
+    else{
+        yes;
 
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
+        if((n - 3) % 3 == 0){
+            cout << "1 4 " << n-5 << endl;
         }
         else{
-            num += mp[word];
-            last = word;
+            cout << "1 2 " << n-3 << endl;
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
     
 }
 
@@ -106,7 +77,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

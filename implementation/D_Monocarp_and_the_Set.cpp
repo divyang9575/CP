@@ -101,7 +101,7 @@ using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 #define yes cout << "YES" << endl
 #define no cout << "NO" << endl
-#define M 1000000007
+// #define M 1000000007
 #define PI 3.1415926535897932384626433832795
 #define cntbits(x) __builtin_popcount(x)
 #define int long long int
@@ -123,33 +123,90 @@ using pqg = priority_queue<T, vector<T>, greater<T>>;
 // binary search ? dp ? change observation..
 // edge cases ? overflow ? limits ?
 
+const int N = 3e5 + 5;
+const int mod = 998244353;
+int fact[N];
+int inv[N];
+
+long long binpow(long long a, long long b, long long m)
+{
+    a %= m;
+    long long res = 1;
+    while (b > 0)
+    {
+        if (b & 1)
+            res = (res * a) % m;
+        a = (a * a) % m;
+        b >>= 1;
+    }
+    return res;
+}
+
+void factorial()
+{
+    fact[0] = 1;
+    for (int i = 1; i < N; i++)
+    {
+        fact[i] = (fact[i - 1] * 1LL * i) % mod;
+        inv[i] = binpow(i, mod - 2, mod);
+    }
+}
+
 void solve()
 {
-    int n, k; cin >> n;
-    vi arr(n);
-    for(int i=0; i<n; i++) cin >> arr[i] ;
-    cin >> k ;
+    int n, m;
+    cin >> n >> m;
+    string s;
+    cin >> s;
 
-    for(int i=n-2; i>=0; i--){
-        if(arr[i] > arr[i+1]){
-            arr[i] = arr[i+1];
+    int prod = 1;
+    for (int i = 1; i < n - 1; i++)
+    {
+        if (s[i] == '?')
+            prod = (prod * i) % mod;
+    }
+
+    if (s[0] == '?')
+    {
+        cout << "0\n";
+    }
+    else
+        cout << prod << endl;
+
+    while (m--)
+    {
+        int i;
+        cin >> i;
+        char c;
+        cin >> c;
+
+        if (c == '?')
+        {
+            if (s[i - 1] != '?')
+            {
+                s[i - 1] = '?';
+                if (i != 1)
+                    prod = (prod * (i - 1)) % mod;
+            }
+            if (s[0] == '?')
+                cout << "0\n";
+            else
+                cout << prod << endl;
+        }
+        else
+        {
+            if (s[i - 1] == '?')
+            {
+                s[i - 1] = c;
+                if (i != 1)
+                    prod = (prod * inv[i - 1]) % mod;
+            }
+            if (s[0] == '?')
+                cout << "0\n";
+            else
+                cout << prod << endl;
         }
     }
-    arr.insert(arr.begin(), 0);
-    db(arr)
-
-    vi ans(n, 0);
-    int val = k;
-    for(int i=1; i<=n; i++){
-        int coins = arr[i] - arr[i-1] ;
-        if(coins > 0){
-            val = min(val, k / coins) ;
-            k -= val * coins ;
-        }
-        ans[i-1] = val;
-    }
-    db(ans)
-    give(ans, ans.size());
 }
 
 int32_t main()
@@ -160,9 +217,9 @@ int32_t main()
     freopen("output.txt", "w", stdout);
     freopen("error.txt", "w", stderr);
 #endif
-
+    factorial();
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--)
     {
         solve();

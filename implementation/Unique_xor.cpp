@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,52 +47,42 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
+    int n, k; cin >> n >> k;
+    string s; cin >> s;
 
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
+    vpi cnt(k);
+    bool f = false;
+    for(int i=0; i<k; i++){
+        int z = 0, o = 0;
+        for(int j=i; j<n; j+=k){
+            if(s[j] == '0') z++;
+            else o++;
         }
-        else{
-            num += mp[word];
-            last = word;
-        }
+        if(o == 0) f = true;
+        cnt[i] = {z, o};
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+    db(cnt)
+    int ans = 0;
+    // convert all zero
+    for(int i=0; i<k; i++){
+        int zero = cnt[i].first, one = cnt[i].second ;
+
+        if(one & 1) ans += one / 2 + 2;
+        else ans += one / 2;
+    }
+
+    if(f) 
+        cout << ans << endl;
+    else{
+        int ans2 = 0;
+        for(int i=0; i<k; i++){
+            int zero = cnt[i].first, one = cnt[i].second ;
+            ans2 += zero;
+        }
+        cout << min(ans, ans2) << endl;
+    }
     
 }
 
@@ -106,7 +95,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

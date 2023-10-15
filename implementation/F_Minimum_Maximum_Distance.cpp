@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -47,54 +46,61 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
+const int N = 2e5 + 5;
+int n, k ;
+vi tree[N];
+set<int> st;
+const int INF = 1e17 ;
+vi vis(N);
+vi marked(N);
 
+void DFS(int node, int cnt, int &mx, int &corner){
+    vis[node] = 1;
+    for(auto child : tree[node]){
+        if(vis[child]) continue;
+        if(marked[child] && cnt > mx){
+            mx = cnt;
+            corner = child;
+        }
+        DFS(child, cnt + 1, mx, corner) ;
+    }
+}
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
+    st.clear();
+    cin >> n >> k;
 
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    for(int i=0; i<n; i++){
+        tree[i].clear();
+        vis[i] = 0;
+        marked[i] = 0;
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
+    for(int i=0; i<k; i++){
+        int x; cin >> x;
+        x--;
+        st.insert(x);
+        marked[x] = 1;
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
-    
+
+    for(int i=1; i<=n-1; i++){
+        int u, v; cin >> u >> v;
+        u--, v-- ;
+        tree[u].push_back(v);
+        tree[v].push_back(u);
+    }
+
+    int mx = 0;
+    int corner = *st.begin();
+    vis.assign(n, 0);
+    DFS(corner, 1, mx, corner) ;
+
+    mx = 0;
+    vis.assign(n, 0);
+    DFS(corner, 1, mx, corner);
+    cout << (mx+1)/2 << endl;
+
 }
 
 int32_t main()
@@ -106,7 +112,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

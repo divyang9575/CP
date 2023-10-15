@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -51,50 +50,44 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
+	int n; cin >> n;
+	string s; cin >> s;
+	
+	if(n == 1){
+	    cout << "8\n";
+	    return;
+	}
+	
+	string ss = "";
+    ss += s[n-3];
+    ss += s[n-2];
+    ss += s[n-1];
+    db(ss)
+    stringstream str(ss);
+    int num = 0;
+    str >> num;
 
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
-    }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
-    
+	if(num % 8 == 0){
+	    cout << s << endl;
+	}
+	else{
+	    string ans = "" ; ans += s[n-2];
+        stringstream sss(ans);
+        int a = 0;
+        sss >> a;
+        db(a) db(ans)
+	    ans = "";
+	    for(int i=0; i<=9; i++){
+	        if((a*10 + i) % 8 == 0){
+	            ans += to_string(i);
+	            s[n-1] = ans[0];
+	            cout << s << endl;
+	            return;
+	        }
+	    }
+	    
+	    
+	}
 }
 
 int32_t main()
@@ -106,7 +99,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

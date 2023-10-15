@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -31,7 +30,7 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 #define yes cout << "YES" << endl
 #define no cout << "NO" << endl
-#define M 1000000007
+// #define M 1000000007
 #define PI 3.1415926535897932384626433832795
 #define cntbits(x) __builtin_popcount(x)
 #define int long long int
@@ -48,52 +47,45 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+const int N = 2e5 + 5;
+const int mod = 998244353 ;
+int fact[N];
+
+void factorial(){
+    fact[0] = 1 ;
+    for(int i=1; i<N; i++){
+        fact[i] = (fact[i-1] *1LL* i) % mod ;
+    }
+}
+
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
+    string S; cin >> S;
 
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
+    vi lens;
+    int ans = 1;
+    int i=0 , j = 0;
+    while(j < S.size() &&  i < S.size()){
+        if(S[i] != S[j]){
+            if(j-i > 1) lens.push_back(j-i);
+            i=j;
         }
         else{
-            num += mp[word];
-            last = word;
+            j++;
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+    if(j-i > 1) lens.push_back(j-i) ;
+    db(lens)
+
+    int total = accumulate(all(lens), 0LL) - (int)lens.size() ;
+
+    for(auto len : lens){
+        ans = (ans % mod) * (len ) % mod ;
+        ans %= mod ;
+    }
+
+    cout << total << " " << (ans * fact[total]) % mod << endl;
     
 }
 
@@ -104,9 +96,9 @@ freopen("input.txt", "r", stdin);
 freopen("output.txt", "w", stdout);
 freopen("error.txt", "w", stderr);
 #endif
-
+    factorial() ;
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -125,31 +125,71 @@ using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    int n, k; cin >> n;
-    vi arr(n);
-    for(int i=0; i<n; i++) cin >> arr[i] ;
-    cin >> k ;
+    int px, py, ax, ay, bx, by;
+    cin >> px >> py >> ax >> ay >> bx >> by;
 
-    for(int i=n-2; i>=0; i--){
-        if(arr[i] > arr[i+1]){
-            arr[i] = arr[i+1];
+    precise(12);
+
+    double d1 = (px - ax) * (px - ax) + (py - ay) * (py - ay);
+    double d2 = (px - bx) * (px - bx) + (py - by) * (py - by);
+    db(d1) db(d2) double D;
+    bool one = false, two = false;
+    if (d1 < d2)
+    {
+        D = d1;
+        one = true;
+    }
+    else
+    {
+        D = d2;
+        two = true;
+    }
+    db(D)
+
+        double o1 = (0 - ax) * (0 - ax) + (0 - ay) * (0 - ay);
+    double o2 = (0 - bx) * (0 - bx) + (0 - by) * (0 - by);
+    db(o1) db(o2)
+
+        double O;
+    if (o1 < o2)
+    {
+        O = o1;
+        one = true;
+    }
+    else
+    {
+        O = o2;
+        two = true;
+    }
+    db(O)
+        db(one) db(two)
+
+            double dist = (bx - ax) * (bx - ax) + (by - ay) * (by - ay);
+    dist = sqrt(dist) / 2;
+    db(dist)
+
+        double w = max(sqrt(O), sqrt(D));
+    db(w)
+
+        if (one == false)
+    {
+        cout << w << endl;
+    }
+    else if (two == false)
+    {
+        cout << w << endl;
+    }
+    else
+    {
+        if (w < dist)
+        {
+            cout << dist << endl;
+        }
+        else
+        {
+            cout << w << endl;
         }
     }
-    arr.insert(arr.begin(), 0);
-    db(arr)
-
-    vi ans(n, 0);
-    int val = k;
-    for(int i=1; i<=n; i++){
-        int coins = arr[i] - arr[i-1] ;
-        if(coins > 0){
-            val = min(val, k / coins) ;
-            k -= val * coins ;
-        }
-        ans[i-1] = val;
-    }
-    db(ans)
-    give(ans, ans.size());
 }
 
 int32_t main()

@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -51,50 +50,29 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    int n; cin >> n;
+    vector<string> g(n);
+    for(int i=0; i<n; i++){
+        cin >> g[i];
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
+    int moves = 0;
+    vvi vis(n, vi(n, 0));
+    for(int i=0; i<n; i++){
+        for(int j=i; j<n-i; j++){
+            if(vis[i][j] || vis[j][n-1-i] || vis[n-1-j][i] || vis[n-1-i][n-1-j]) continue;
+            int a = g[i][j] - 'a', b = g[j][n-1-i]-'a', c = g[n-1-j][i]-'a', d = g[n-1-i][n-1-j]-'a' ;
 
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
+            vis[i][j] = vis[j][n-1-i] = vis[n-1-j][i] = vis[n-1-i][n-1-j] = 1;
+            int mx = max({a, b, c, d}) ;
+            db(mx)
+            for(auto it : {a, b, c, d}){
+                moves += (mx) - (it) ;
+            }
+            db(moves)
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
-    
+    cout << moves << endl;
 }
 
 int32_t main()
@@ -106,7 +84,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

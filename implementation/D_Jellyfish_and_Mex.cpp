@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,53 +47,60 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+const int N = 5005;
+const int INF = 1e17;
+int n;
+// int dp[N];
+
+// int f(int curmex, vi &freq){
+//     if(curmex == 0) return 0;
+    
+//     if(dp[curmex] != -1) return dp[curmex];
+
+//     int ans = INF;
+//     for(int i=0; i<curmex; i++){
+//         ans = min(ans, (freq[i]-1) * curmex + i + f(i, freq)) ;
+//     }
+//     return dp[curmex] = ans;
+// }
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    cin >> n;
+    vi arr(n);
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
     }
-    db(arr)
+    db(n) db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
+    vi freq(n+1, 0); 
+    for(auto it : arr) if(it <= n) freq[it]++;
 
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
+    int mex = n;
+    for(int i=0; i<=n; i++) {
+        if(freq[i] == 0) {
+            mex = i;
+            break;
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+
+
+    vector<int> dp(mex+1, INF);
+    dp[0] = 0;
+    for(int i=1; i<=mex; i++){
+        dp[i] = INF;
+        for(int j=0; j<i; j++){
+            dp[i] = min(dp[i], i*(freq[j]-1) + j + dp[j]);
+        }
+    }
+    cout << dp[mex] << endl;
     
+    // db(freq) db(mex)
+    // memset(dp, -1, sizeof dp);
+    // int ans = f(mex, freq);
+    // cout << ans << endl;
+
+
 }
 
 int32_t main()
@@ -106,7 +112,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -48,52 +47,49 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
+const int INF = 1e18 ;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
-    
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
+    int n, m, k; cin >> n >> m >> k;
+    vi J, G ;
+    int sum = 0;
+    int mx = -INF, mn = INF ;
+    for(int i=0; i<n; i++){
+        int a; cin >> a;
+        J.push_back(a) ;
+        sum += a;
     }
-    db(arr)
 
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
+    for(int i=0; i<m;i++){
+        int b; cin >> b;
+        G.push_back(b);
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+    sort(all(J));
+    sort(all(G));
+
+    // one step
+    if(J[0] > G[m-1] ) k--;
+    else {
+        sum -= J[0];
+        sum += G[m-1];
+        swap(J[0], G[m-1]);
+        k--;
+    }
+    sort(all(J));
+    sort(all(G));
+
+    if(k & 1){
+        sum -= J[n-1];
+        sum += G[0] ;
+        cout << sum << endl;
+    }   
+    else{
+        cout << sum << endl;
+    }
+
+
+
     
 }
 
@@ -106,7 +102,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

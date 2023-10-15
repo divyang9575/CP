@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -51,49 +50,23 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
+    int n, m; cin >> n >> m;
+
+    string x, s; cin >> x >> s;
     
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
+    int cnt = 0, ops = 0;
+    while(ops < 100){
+        if(x.find(s, 0) != string::npos){
+            cout << cnt << endl;
+            return;
         }
         else{
-            num += mp[word];
-            last = word;
+            ops += x.size();
+            x += x;
+            cnt++;
         }
     }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
+    cout << -1 << endl;
     
 }
 
@@ -106,7 +79,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }

@@ -15,7 +15,8 @@
     "thread": "cpp",
     "tuple": "cpp",
     "cstdlib": "cpp",
-    "cmath": "cpp"
+    "cmath": "cpp",
+    "ostream": "cpp"
   },
   "cph.general.onceMaintainerMessage": false
 }

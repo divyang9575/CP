@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include<sstream>
 using namespace std;
 
 
@@ -51,49 +50,53 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 
 void solve()
 {
-    string s ; 
-    getline(cin , s) ;
+    int a, b, n; cin >> a >> b >>  n;
+    vi arr(n); 
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
+    }
+    sort(all(arr));
+
+    int time = 0 ;
+    int A = a;
+    if(a == 1){
+        cout << a << endl;
+        return ;
+    }
+
+
+    int cur = b;
+    bool add = false;
+    int i=0 ;
+    while(i < n ){
+        if(cur + arr[i] <= A){
+            db(cur) db(arr[i])
+            add = true;
+            cur += arr[i];
+            i++;
+            db(cur) 
+        }
+        else {
+            if(cur > 1)
+                cur--;
+            else break ;
+
+            db(cur)
+            time += cur ;
+            cur = 1 ;
+            db(time)
+        }
+    }
+
+    if(cur > 1) time += cur-1;
+
+    while(i < n){
+        time += A-1;
+        i++;
+    }
+    time++;
+    cout << time << endl;
     
-    map<string, string> mp = {
-        {"zero", "0"},
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"},
-        {"four", "4"},
-        {"five", "5"},
-        {"six", "6"},
-        {"seven", "7"},
-        {"eight", "8"},
-        {"nine", "9"}
-    } ;
-
-    vector<string > arr ;
-
-    stringstream iss(s) ;
-    string word ;
-
-    while(iss >> word){
-        arr.push_back(word) ; 
-    }
-    db(arr)
-
-    reverse(arr.begin(), arr.end()) ;
-
-    string num = "";
-    string last;
-    for(auto word : arr){
-        if(word == "double") num += mp[last] ;
-        else if(word == "triple") {
-            num += mp[last];
-            num += mp[last];
-        }
-        else{
-            num += mp[word];
-            last = word;
-        }
-    }
-    reverse(num.begin(), num.end()) ;
-    cout << num << endl;
     
 }
 
@@ -106,7 +109,7 @@ freopen("error.txt", "w", stderr);
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     while(t--){
         solve();
     }
