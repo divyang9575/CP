@@ -46,27 +46,67 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
-int dice[] = {1, 2, 3, 4 ,5 ,6};
-int dp[6][1000006];
-int func(int ind, int sum){
-    if(sum < 0 || ind == 6) return 0;
-    if(sum == 0) return 1;
-    if(dp[ind][sum] != -1) return dp[ind][sum];
-    int ans = 0;
-    fo(i,0,5){
-        ans += func(i, sum - dice[i])% M;
-        ans %= M;
-    }
-    return dp[ind][sum] = ans;
-}
 
+// int dice[] = {1, 2, 3, 4 ,5 ,6};
+// int dp[6][1000006];
+// int func(int ind, int sum){
+//     if(sum < 0 || ind == 6) return 0;
+//     if(sum == 0) return 1;
+//     if(dp[ind][sum] != -1) return dp[ind][sum];
+//     int ans = 0;
+//     fo(i,0,5){
+//         ans += func(i, sum - dice[i])% M;
+//         ans %= M;
+//     }
+//     return dp[ind][sum] = ans;
+// }
+
+// void solve()
+// {
+//     int n; cin >> n;
+//     memset(dp, -1, sizeof(dp));
+
+//     cout << func(0, n);
+// }
+
+// int dp[1000005];
+
+// int f(int sum){
+//     if(sum == 0) return 1;
+
+//     int ans = 0;
+//     for(int i=6; i>=1; i--){
+//         if(sum-i >= 0)
+//             ans += f(sum - i);
+//     }
+//     return ans;
+// }
+
+void modsum(int &a, int b){
+    a += b;
+    if(a > M) a %= M;
+}
 void solve()
 {
-    int n; cin >> n;
-    memset(dp, -1, sizeof(dp));
+    int sum; cin >> sum;
+    // vi arr = {1, 2, 3, 4, 5, 6};
+    // memset(dp, -1, sizeof dp);
+    // cout << f(sum) << endl;
 
-    cout << func(0, n);
+    vector<int> dp(sum+1, 0);
+    dp[0] = 1;
+    for(int i=1; i<=sum; i++){
+        for(int j=1; j<=6; j++){
+            if(i-j >= 0)
+                modsum(dp[i], dp[i-j]);
+        }
+    }
+    cout << dp[sum] << endl;
 }
+
+
+
+
 
 int32_t main()
 {fast

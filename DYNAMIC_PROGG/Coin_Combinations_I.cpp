@@ -48,46 +48,53 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
 
-int dp[1000005];
-int f(int sum, vi&a, int n)
-{
-    if(sum == 0) return 1;
-    if(dp[sum] != -1) return dp[sum];
+// int dp[1000005];
+// int f(int sum, vi&a, int n)
+// {
+//     if(sum == 0) return 1;
+//     if(dp[sum] != -1) return dp[sum];
 
-    int ways = 0;
-    fo(i, 0, n-1){
-        if(sum - a[i] >= 0){
-            ways += f(sum - a[i], a, n);
-            ways %= M;
-        }
-    }
-    return dp[sum] = ways;
-}
+//     int ways = 0;
+//     fo(i, 0, n-1){
+//         if(sum - a[i] >= 0){
+//             ways += f(sum - a[i], a, n);
+//             ways %= M;
+//         }
+//     }
+//     return dp[sum] = ways;
+// }
 
-void solve()
-{
-    int n, sum; cin >> n >> sum;
-    vi a(n); fo(i,0,n-1) cin >> a[i];
+// void solve()
+// {
+//     // int n, sum; cin >> n >> sum;
+//     // vi a(n); fo(i,0,n-1) cin >> a[i];
 
-    // int dp[sum + 1];
-    // memset(dp , 0 , sizeof(dp));
-
-    // dp[0] = 1;
-    // fo(i,0,sum){
-    //     fo(j,0,n-1){
-    //         if(i - a[j] >= 0){
-    //             dp[i] += dp[i-a[j]];
-    //             dp[i] %= M;
-    //         }
-    //     }
-    // }
-    // cout << dp[sum];
-
-    memset(dp , -1 , sizeof(dp));
-    cout << f(sum, a, n );
+//     // memset(dp , -1 , sizeof(dp));
+//     // cout << f(sum, a, n );
  
     
+// }
+
+void modsum(int &a, int b) { a += b; if(a >= M) a %= M;}
+void modmul(int &a, int b) { a *= b; if(a >= M) a %= M;}
+
+void solve(){
+    int n, sum; cin >> n >> sum ;
+    vi arr(n);
+    for(int i=0; i<n; i++) cin >> arr[i];
+
+    vector<int> dp(sum+1, 0);
+    dp[0] = 1;
+
+    for(int i=1; i<=sum; i++){
+        for(int j=0; j<n; j++){
+            if(i-arr[j] >= 0)
+            modsum(dp[i] , dp[i-arr[j]]);
+        }
+    }
+    cout << dp[sum] << endl;
 }
+
 
 int32_t main()
 {fast

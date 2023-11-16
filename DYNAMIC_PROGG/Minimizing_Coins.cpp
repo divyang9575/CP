@@ -46,33 +46,53 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
-int dp[1000004];
-vi a(104);
-int func(int sum, int n)
-{
-    debug(sum)
-    if( sum < 0) return (int)1e7;
-    if(sum == 0) return 0;
-    if(dp[sum] != -1) return dp[sum];
+// int dp[1000004];
+// vi a(104);
+// int func(int sum, int n)
+// {
+//     debug(sum)
+//     if( sum < 0) return (int)1e7;
+//     if(sum == 0) return 0;
+//     if(dp[sum] != -1) return dp[sum];
     
-    int ans = 1e9;
-    fo(i,1,n){
-        ans = min(ans, 1 + func(sum - a[i], n));
-    }
-    return dp[sum] = ans;
-}
+//     int ans = 1e9;
+//     fo(i,1,n){
+//         ans = min(ans, 1 + func(sum - a[i], n));
+//     }
+//     return dp[sum] = ans;
+// }
 
-void solve()
-{
+// void solve()
+// {
+//     int n, sum; cin >> n >> sum;
+//     fo(i,1,n) cin >> a[i];
+//     debug(n) debug(a)
+
+//     memset(dp, -1, sizeof(dp));
+//     int ans = func(sum, n);
+//     cout << (ans > 1e7 ? -1 : ans) ;
+// }
+
+void solve(){
     int n, sum; cin >> n >> sum;
-    fo(i,1,n) cin >> a[i];
-    debug(n) debug(a)
+    vi arr(n);
+    for(int i=0; i<n; i++) cin >> arr[i];
+    sort(all(arr));
 
-    memset(dp, -1, sizeof(dp));
-    int ans = func(sum, n);
-    cout << (ans > 1e7 ? -1 : ans) ;
-    
+    int dp[sum+1];
+    // for(int i=0; i<=n; i++) dp[i][0] = 0;
+    dp[0] = 0;
+    const int INF = 1e15;
+    for(int i=1; i<=sum; i++){
+        dp[i] = 1e15;
+        for(int j=0; j<n; j++){
+            if(i-arr[j] >= 0)
+            dp[i] = min(dp[i], 1 + dp[i-arr[j]]);
+        }
+    }
+    cout << (dp[sum] == INF ? -1 : dp[sum]) << endl;
 }
+
 
 int32_t main()
 {fast

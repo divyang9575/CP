@@ -49,24 +49,44 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
  // edge cases ? overflow ? limits ? 
 
 
-void solve()
-{
-    int n , sum; cin >> n>> sum;
-    vi a(n);
-    fo(i,0,n-1) cin >> a[i];
+// void solve()
+// {
+//     int n , sum; cin >> n>> sum;
+//     vi a(n);
+//     fo(i,0,n-1) cin >> a[i];
     
-    int dp[sum+1] = {0};
+//     int dp[sum+1] = {0};
+//     dp[0] = 1;
+//     fo(ind,0,n-1){
+//         fo(amt, 1, sum){
+//             if(amt - a[ind] >= 0)
+//             dp[amt] += dp[amt - a[ind]];
+//             dp[amt] %= M;
+//         }
+//     }
+//     cout << dp[sum];
+    
+// }
+
+void modsum(int &a, int b) { a += b; if(a >= M) a %= M;}
+void modmul(int &a, int b) { a *= b; if(a >= M) a %= M;}
+
+void solve(){
+    int n, sum; cin >> n >> sum;
+    vi arr(n); for(int i=0; i<n; i++) cin >> arr[i];
+
+    vector<int> dp(sum+1, 0);
     dp[0] = 1;
-    fo(ind,0,n-1){
-        fo(amt, 1, sum){
-            if(amt - a[ind] >= 0)
-            dp[amt] += dp[amt - a[ind]];
-            dp[amt] %= M;
+
+    for(int j=0; j<n; j++){
+        for(int i=1; i<=sum; i++){
+            if(i - arr[j] >= 0)
+            modsum(dp[i], dp[i-arr[j]]);
         }
     }
-    cout << dp[sum];
-    
+    cout << dp[sum] << endl;
 }
+
 
 int32_t main()
 {fast

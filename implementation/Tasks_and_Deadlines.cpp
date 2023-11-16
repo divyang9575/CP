@@ -18,24 +18,34 @@ using namespace std;
 
  // binary search ? dp ? change observation.. 
  // edge cases ? overflow ? limits ? 
+int n;
+vi arr;
+void f(){
+    long long sum = 0;
+    int ans = 0, cnt = 0;
+    for(int i=0; i<n; i++){
+        sum += abs(arr[i]);
+        if(arr[i] <= 0){
+            if(arr[i] == 0 && cnt == 0) continue;
+            cnt++ ;
+        }
+        else{
+            if(cnt > 0) ans++;
+            cnt = 0;
+        }
+    }
+    if(cnt > 0) ans++;
 
+    // return {sum, ans};
+    cout << sum <<  " " << ans ;
+}
 
 void solve()
 {
-    int n; cin >> n;
-    vpi a(n); fo(i,0,n-1) cin >> a[i].first >> a[i].second;
-    
-    sort(all(a));
-
-    int curtime = 0;
-    int maxRew = 0;
-    fo(i,0,n-1)
-    {
-        curtime += a[i].ff;
-        int reward = a[i].second - curtime;
-        maxRew += reward;
-    }
-    cout << maxRew;
+    cin >> n;
+    arr.resize(n);
+    fo(i,0,n-1) cin >> arr[i];
+    f();
 }
 
 int32_t main()

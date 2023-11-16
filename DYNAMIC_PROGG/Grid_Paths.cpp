@@ -66,48 +66,74 @@ template <class T, class V> void _print(multimap <T, V> v) {cerr << "[ "; for (a
 // }
 
     
-void solve()
-{
-    int n; cin >> n;
+// void solve()
+// {
+//     int n; cin >> n;
 
-    // fo(i,0,n-1){
-    //     string s; cin >> s;
-    //     fo(j,0,n-1){
-    //         if(s[j] == '.') grid[i+1][j+1] = 1;
-    //         else grid[i+1][j+1] = 0;
-    //     }
-    // }
-    // if(grid[n][n] == 0) cout << 0;
-    // else
-    // {
-    //     memset(dp);
-    //     cout << f(n, n);
-    // }
+//     // fo(i,0,n-1){
+//     //     string s; cin >> s;
+//     //     fo(j,0,n-1){
+//     //         if(s[j] == '.') grid[i+1][j+1] = 1;
+//     //         else grid[i+1][j+1] = 0;
+//     //     }
+//     // }
+//     // if(grid[n][n] == 0) cout << 0;
+//     // else
+//     // {
+//     //     memset(dp);
+//     //     cout << f(n, n);
+//     // }
 
-    vector<string> grid(n);
-    fo(i,0,n-1){
-        cin >> grid[i];
-    }
-    debug(grid)
-    int dp[n+1][n+1] ;
-    fo(i,0,n) {
-        fo(j,0,n) dp[i][j] = 0;
-    }
-    if(grid[0][0] == '.') dp[1][1] = 1;
+//     vector<string> grid(n);
+//     fo(i,0,n-1){
+//         cin >> grid[i];
+//     }
+//     debug(grid)
+//     int dp[n+1][n+1] ;
+//     fo(i,0,n) {
+//         fo(j,0,n) dp[i][j] = 0;
+//     }
+//     if(grid[0][0] == '.') dp[1][1] = 1;
     
-    fo(i,1,n){
-        fo(j, 1, n){
-            // debug(i) debug(j) debug(dp[i][j]) 
-            if(i == 1 && j == 1) continue;
-            if(grid[i-1][j-1] == '.' ){
-                dp[i][j] = (dp[i-1][j] + dp[i][j-1]) %M;
-                debug(dp[i-1][j]) debug(dp[i][j-1])
+//     fo(i,1,n){
+//         fo(j, 1, n){
+//             // debug(i) debug(j) debug(dp[i][j]) 
+//             if(i == 1 && j == 1) continue;
+//             if(grid[i-1][j-1] == '.' ){
+//                 dp[i][j] = (dp[i-1][j] + dp[i][j-1]) %M;
+//                 debug(dp[i-1][j]) debug(dp[i][j-1])
+//             }
+//             // debug(dp[i][j])
+//         }
+//     }
+//     cout << dp[n][n];
+    
+// }
+
+void modsum(int &a, int b) { a += b; if(a >= M) a %= M;}
+void modmul(int &a, int b) { a *= b; if(a >= M) a %= M;}
+
+void solve(){
+    int n; cin >> n;
+    vector<string> arr(n);
+    for(int i=0; i<n; i++) cin >> arr[i];
+
+    vector<vi> dp(n+1, vi(n+1, 0));
+
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            if(i == 1 && j == 1){
+                if(arr[i-1][j-1] != '*') dp[i][j] = 1;
             }
-            // debug(dp[i][j])
+            else{
+                if(arr[i-1][j-1] != '*'){
+                    modsum(dp[i][j] , dp[i-1][j]);
+                    modsum(dp[i][j] , dp[i][j-1]);
+                }
+            }
         }
     }
-    cout << dp[n][n];
-    
+    cout << dp[n][n] << endl;
 }
 
 int32_t main()
